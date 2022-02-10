@@ -101,7 +101,7 @@ background(bg1)
   if(obstacleGrp.isTouching(bulletGrp)){
 	  score +=5
 	  bulletGrp.destroyEach()
-	  obstacleGrp[0].destroy();
+	  obstacleGrp.destroy();
 	  md++
 
   }
