@@ -32,6 +32,9 @@ function setup() {
 	playerPlane.addImage(playerPlaneImg)
 	playerPlane.scale = 0.5
 
+	playerPlane.setCollider("circle",20,30,100)
+
+
 	obstacleGrp = new Group()
 	bulletGrp = new Group();
 	title = createElement("h2");
@@ -101,7 +104,7 @@ background(bg1)
   if(obstacleGrp.isTouching(bulletGrp)){
 	  score +=5
 	  bulletGrp.destroyEach()
-	  obstacleGrp.destroy();
+	  obstacleGrp[0].destroy();
 	  md++
 
   }
