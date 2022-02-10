@@ -26,9 +26,9 @@ function preload()
 }
 
 function setup() {
-	createCanvas(1200, 800);
+	createCanvas(windowWidth-10, windowHeight-10);
 	
-	playerPlane = createSprite(600,700)
+	playerPlane = createSprite(windowWidth/2,windowHeight-windowHeight/6)
 	playerPlane.addImage(playerPlaneImg)
 	playerPlane.scale = 0.5
 
@@ -39,7 +39,7 @@ function setup() {
 	button = createButton("Start Game!")
 	score = 0
 	md = 0
-	reset = createSprite(1150,50);
+	reset = createSprite(windowWidth-windowWidth/10,windowHeight-windowHeight+40);
 	reset.addImage(resetImage);
 	reset.scale = 0.15;
 	obstacleVelocity = 3;
@@ -52,19 +52,18 @@ function draw() {
 background("white")
 if(gameState === "new"){
 background(bg1)
-	textSize(24)
+	textSize(20)
 	fill("white")
 	stroke(2)
 	strokeWeight(3)
-	text("Instructions\n1.Enter Your Name And Press Play to start The Game!\n2.Press Space Key To Shoot Bullets\n3.Dont Touch the incoming Meteors\n4.Press Left And Right Arrow to Move",325,500)
+	text("Instructions\n1.Enter Your Name And Press Play to start The Game!\n2.Press Space Key To Shoot Bullets\n3.Dont Touch the incoming Meteors\n4.Press Left And Right Arrow to Move",windowWidth-windowWidth+windowWidth/2-300,windowHeight-windowHeight/2+70)
 	title.html("Space Shooter")
 	
-    title.position(535,100)
+    title.position(windowWidth-windowWidth/2-50,windowHeight-windowHeight/2-325)
     
-   input.position(535,300)
+   input.position(windowWidth-windowWidth/2-90,windowHeight-windowHeight/2-150)
     
-    button.position(550,350)
-
+    button.position(windowWidth-windowWidth/2-50,windowHeight-windowHeight/2-75)
     button.mousePressed(()=>{
 		inpval = input.value()
 		button.hide()
@@ -80,11 +79,11 @@ background(bg1)
 
   textSize(20)
   fill("blue")
-  text(inpval + "'s"+" Score: " + score,100,100);
+  text(inpval + "'s"+" Score: " + score,windowWidth-windowWidth,windowHeight-windowHeight+40);
   
   if(keyDown("space")){
 	  if(frameCount%5===0){
-	  bullet = createSprite(playerPlane.x,700);
+	  bullet = createSprite(playerPlane.x,playerPlane.y+10);
 	  bullet.addImage(bulletImg);
 	  bullet.scale = 0.1;
 	  bullet.velocityY = -4;
@@ -139,7 +138,7 @@ if(gameState === "end") {
 	}
 	if(mousePressedOver(reset)){
 		gameState = "play"
-		playerPlane = createSprite(600,700)
+		playerPlane = createSprite(windowWidth/2,windowHeight-windowHeight+500)
 		playerPlane.addImage(playerPlaneImg)
 		playerPlane.scale = 0.5
 	}
@@ -161,4 +160,5 @@ function createObstacle(){
 		obstacleGrp.setVelocityYEach(3);
 	}
 }
+
 
