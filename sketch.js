@@ -141,7 +141,7 @@ if(gameState === "end") {
 	}
 	if(mousePressedOver(reset)){
 		gameState = "play"
-		playerPlane = createSprite(windowWidth/2,windowHeight-windowHeight+500)
+		playerPlane = createSprite(windowWidth/2,windowHeight-windowHeight/6)
 		playerPlane.addImage(playerPlaneImg)
 		playerPlane.scale = 0.5
 	}
