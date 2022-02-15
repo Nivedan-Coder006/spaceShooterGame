@@ -11,6 +11,8 @@ var inpval,md,fb,shootSound,spaceSound;
 var reset,resetImage;
 var obstacleVelocity;
 var FeedBack,feedback;
+var n;
+var TotalBullets
 function preload()
 {
 	playerPlaneImg = loadImage("simg.png")
@@ -26,7 +28,7 @@ function preload()
 }
 
 function setup() {
-	createCanvas(windowWidth-10, windowHeight-10);
+	createCanvas(windowWidth-4, windowHeight-4);
 	
 	playerPlane = createSprite(windowWidth/2,windowHeight-windowHeight/6)
 	playerPlane.addImage(playerPlaneImg)
@@ -34,7 +36,7 @@ function setup() {
 
 	playerPlane.setCollider("circle",20,30,100)
 
-
+	n = 0;
 	obstacleGrp = new Group()
 	bulletGrp = new Group();
 	title = createElement("h2");
@@ -47,6 +49,10 @@ function setup() {
 	reset.scale = 0.15;
 	obstacleVelocity = 3;
 	FeedBack = "Nice Shot!"
+	gameOver =createSprite(windowWidth-windowWidth+600,windowHeight-windowHeight+200)
+	gameOver.addImage(gameOverImg)
+	gameOver.visible = false;
+	TotalBullets = 264
 }
 
 
@@ -76,13 +82,18 @@ background(bg1)
     })
 }
   if(gameState === "play"){
-  background(bg);
+  background(bg1);
 
   createObstacle();
+  title.hide()
 
-  textSize(20)
-  fill("blue")
+  textSize(30)
+  fill("darkgrey")
+  stroke(4)
+
   text(inpval + "'s"+" Score: " + score,windowWidth-windowWidth,windowHeight-windowHeight+40);
+  text("Bullet's Left: "+ (TotalBullets),windowWidth-windowWidth,windowHeight-windowHeight+80);
+
   
   if(keyDown("space")){
 	  if(frameCount%5===0){
@@ -93,6 +104,7 @@ background(bg1)
 	  bullet.lifeTime = 800; 
 	  bulletGrp.add(bullet);
 	  shootSound.play();
+	  TotalBullets = TotalBullets-1
 	  }
   }	
   if(keyDown("Left")){
@@ -101,13 +113,14 @@ background(bg1)
   if(keyDown("right")){
 	  playerPlane.x = playerPlane.x+5;
   }
-  if(obstacleGrp.isTouching(bulletGrp)){
-	  score +=5
-	  bulletGrp.destroyEach()
-	  obstacleGrp.destroyEach();
-	  md++
+  for (let i = 0; i < obstacleGrp.length; i++) {
 
-  }
+	obstacleGrp[i].displace(obstacleGrp);
+ }
+ 
+ bulletGrp.collide(obstacleGrp, removeBlocks);
+ 
+  
   if(playerPlane.isTouching(obstacleGrp)){
 	  gameState = "end"
 	  
@@ -116,16 +129,16 @@ background(bg1)
   drawSprites();
 }
 if(gameState === "end") {
-	background(bg2)
+	background(bg1)
 	obstacleGrp.setVelocityYEach(0);
 	obstacleGrp.destroyEach();
 	playerPlane.destroy()
-
+	gameOver.visible = true
 	textSize(30)
 	fill("White")
 	stroke(2)
 	strokeWeight(2)
-	text("Space Shooter!\n\n\n\nYOUR STATS: \nYour Score: " +score+"\nNumber Of Meteors Destroyed: "+ md+"\nRemarks: "+fb,475,200)
+	text("Space Shooter!\n\n\n\nYOUR STATS: \nYour Score: " +score+"\nNumber Of Meteors Destroyed: "+ md+"\nRemarks: "+fb,475,400)
 
 	if(score<=15&&score>=5){
 		fb = "You Can Still Improve. :D"
@@ -151,8 +164,9 @@ if(gameState === "end") {
 
 }
 function createObstacle(){
+	
 	r = Math.round(random(50,1150))
-	if(frameCount%80 === 0){
+	if(frameCount%65 === 0){
 		obstacle = createSprite(r,100);
 		obstacle.addImage(obstacleImg);
 		obstacle.scale = 0.25;
@@ -161,7 +175,14 @@ function createObstacle(){
 		obstacle.setCollider("circle",50,50,100)
 		obstacleGrp.add(obstacle);
 		obstacleGrp.setVelocityYEach(3);
+
 	}
 }
 
 
+function removeBlocks(sprite, obstacle){
+	obstacle.remove();
+	bulletGrp.destroyEach()
+	score +=5
+	md++
+  }
